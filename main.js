@@ -11,37 +11,70 @@ import tom from "./sounds/tom.wav";
 let app_mode = "";
 //let record_mode = "";
 
-//-----------------------Start---------------------//
+//-----------------------Start Button---------------------//
 const start_game_btn = document.getElementById("start_game");
 start_game_btn.addEventListener("click", () => {
-  if (app_mode === "game") {
-    start_game_btn.textContent = "Start Game";
-    app_mode = "";
-  } else {
+  if (app_mode === "") {
     start_game_btn.textContent = "End Game";
     app_mode = "game";
+  } 
+  else if (app_mode === "game") {
+    start_game_btn.textContent = "Start Game";
+    app_mode = "";
   }
 });
 
-//------------------Record----------------------//
+//------------------Record Button----------------------//
 const record_btn = document.getElementById("record");
 record_btn.addEventListener("click", () => {
-  if (app_mode === "record") {
-    record_btn.textContent = "Record";
-    app_mode = "";
-    console.log("test: " + record_arr[2].time);
-  } else {
-    // Record
+  if (app_mode === "") {
+
+    // Reset Record
     if (record_arr) {
       record_arr = [];
     }
+
     record_btn.textContent = "Stop Record";
     start_record = Date.now();
     app_mode = "record";
+
+  } 
+  else if (app_mode === "record") {
+    
+    record_btn.textContent = "Record";
+    app_mode = "";
+    console.log("test: " + record_arr[2].time);
+   
   }
 });
-//----------------------------------------------//
 
+//------------------Playback Button----------------------//
+const playback_btn = document.getElementById("playback");
+playback_btn.addEventListener("click", () => {
+  if (app_mode === "") {
+    playback_btn.textContent = "Stop Playback";
+    app_mode = "playback";
+    console.log("start playback");
+  } 
+  else if (app_mode === "playback") {
+    playback_btn.textContent = "Playback";
+    app_mode = "";
+    console.log("stop playback");
+  }
+});
+
+//------------------Playback Function----------------------//
+
+const playback = () => {
+
+  record_arr.forEach((element) => {
+
+    const audio = new Audio(k.sound);
+    audio.play();
+  }
+);}
+
+//---------------------Keybindings-------------------------//
 // Sound key configurations
 const key_config = [
   { id: "boom", key: "a", sound: boom },
@@ -55,6 +88,7 @@ const key_config = [
   { id: "tom", key: "l", sound: tom },
 ];
 
+//---------------------Game Logic-------------------------//
 const beats = ["f", "d", "f", "d", "f", "f"];
 const padding_count = 3;
 //const empty_array = ['', '', ''];
@@ -88,9 +122,15 @@ const updateTargets = () => {
     target_div.textContent = item;
     targets.appendChild(target_div);
   });
+  score_element.textContent = score;
 };
 updateTargets();
 
+//---------------------Record Array-------------------------//
+let record_arr = [];
+
+
+//---------------------------Create HTML Markup---------------------------------//
 /* 
     <div id="boom" class="card control">
         <div class="label container">A</div>
@@ -101,12 +141,9 @@ updateTargets();
 // Referencing the main/parent HTML markup
 const parent = document.getElementById("controls");
 
-//--------------Record------------//
-let record_arr = [];
-//-------------------------------//
-
 //key_config.map() //same as "forEach" but will return a new array
 key_config.forEach((k) => {
+
   // Creating the following HTML markup
   // <div id="boom" class="card control"></div>
   const control_div = document.createElement("div");
@@ -132,16 +169,19 @@ key_config.forEach((k) => {
   // Append the main sound div to the parent div
   parent.appendChild(control_div);
 
+  //-------------------Mouse Click Event----------------------//
   control_div.addEventListener("click", (e) => {
     const audio = new Audio(k.sound);
     audio.play();
   });
 
+  //------------------Keydown Event--------------------------//
   document.addEventListener("keydown", (e) => {
     if (e.key.toLocaleLowerCase() === k.key) {
       const audio = new Audio(k.sound);
       audio.play();
 
+      //---------------------Start-------------------------//
       // If user key matches current target key then we increment
       if (
         app_mode === "game" &&
@@ -156,7 +196,7 @@ key_config.forEach((k) => {
 
       updateTargets();
 
-      //----------------Record--------------------//
+      //---------------------Record-------------------------//
       if (app_mode === "record") {
         let time_obj = {};
         time_obj.key = e.key.toLocaleLowerCase();
@@ -170,6 +210,27 @@ key_config.forEach((k) => {
   });
   //console.log(k);
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // document.addEventListener("keydown", (e) => {
 //   if (e.key === "a") {
