@@ -45,7 +45,7 @@ record_btn.addEventListener("click", () => {
 //------------------Playback Button----------------------//
 const playback_btn = document.getElementById("playback");
 playback_btn.addEventListener("click", () => {
-  if (app_mode === "") {
+  if (app_mode === "" && record_arr.length > 0) {
     playback_btn.textContent = "Stop Playback";
     app_mode = "playback";
     console.log("start playback");
@@ -60,39 +60,16 @@ playback_btn.addEventListener("click", () => {
 //------------------Playback Function----------------------//
 
 const playback = () => {
-  //console.log("test123");
-  let interval = 0;
   record_arr.forEach((element, index) => {
-    //console.log(element.key);
-    // setTimeout(() => {
-    //   console.log(element.key);
-    // }, index * element.time);
-
-    // if (index !== 0) {
-    //   previous_time = element.time;
-    // }
-
-    //console.log(previous_time);
-    // console.log(element.time);
-    // console.log(previous_time);
-    if (index !== 0) {
-      interval =
-        element.time - record_arr[record_arr.indexOf(element) - 1].time;
-    }
-
-    setTimeout(() => {
-      key_config.forEach((key) => {
-        console.log(element.key);
-        console.log(interval);
+    key_config.forEach((key) => {
+      setTimeout(function () {
+        //console.log(element.key);
+        //console.log(interval);
         if (element.key.toLocaleLowerCase() === key.key) {
           document.getElementById(key.id).click();
-          // const audio = new Audio(key.sound);
-          // audio.play();
         }
-      });
-    }, index * interval);
-
-    //clearInterval(test);
+      }, element.time);
+    });
   });
 };
 
