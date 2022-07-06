@@ -178,6 +178,18 @@ key_config.forEach((k) => {
       const audio = new Audio(k.sound);
       audio.play();
 
+      //---------------------Transition-------------------------//
+      var element = document.getElementById(k.id);
+      //adding the transition
+      element.classList.add("playing");
+
+      setInterval(removeTransition, 300);
+
+      function removeTransition() {
+        //remove the transition
+        element.classList.remove("playing");
+      }
+
       //---------------------Start-------------------------//
       // If user key matches current target key then we increment
       if (
