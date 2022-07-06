@@ -17,8 +17,7 @@ start_game_btn.addEventListener("click", () => {
   if (app_mode === "") {
     start_game_btn.textContent = "End Game";
     app_mode = "game";
-  } 
-  else if (app_mode === "game") {
+  } else if (app_mode === "game") {
     start_game_btn.textContent = "Start Game";
     app_mode = "";
   }
@@ -28,7 +27,6 @@ start_game_btn.addEventListener("click", () => {
 const record_btn = document.getElementById("record");
 record_btn.addEventListener("click", () => {
   if (app_mode === "") {
-
     // Reset Record
     if (record_arr) {
       record_arr = [];
@@ -37,14 +35,10 @@ record_btn.addEventListener("click", () => {
     record_btn.textContent = "Stop Record";
     start_record = Date.now();
     app_mode = "record";
-
-  } 
-  else if (app_mode === "record") {
-    
+  } else if (app_mode === "record") {
     record_btn.textContent = "Record";
     app_mode = "";
     console.log("test: " + record_arr[2].time);
-   
   }
 });
 
@@ -55,8 +49,8 @@ playback_btn.addEventListener("click", () => {
     playback_btn.textContent = "Stop Playback";
     app_mode = "playback";
     console.log("start playback");
-  } 
-  else if (app_mode === "playback") {
+    playback();
+  } else if (app_mode === "playback") {
     playback_btn.textContent = "Playback";
     app_mode = "";
     console.log("stop playback");
@@ -66,13 +60,41 @@ playback_btn.addEventListener("click", () => {
 //------------------Playback Function----------------------//
 
 const playback = () => {
+  //console.log("test123");
+  let interval = 0;
+  record_arr.forEach((element, index) => {
+    //console.log(element.key);
+    // setTimeout(() => {
+    //   console.log(element.key);
+    // }, index * element.time);
 
-  record_arr.forEach((element) => {
+    // if (index !== 0) {
+    //   previous_time = element.time;
+    // }
 
-    const audio = new Audio(k.sound);
-    audio.play();
-  }
-);}
+    //console.log(previous_time);
+    // console.log(element.time);
+    // console.log(previous_time);
+    if (index !== 0) {
+      interval =
+        element.time - record_arr[record_arr.indexOf(element) - 1].time;
+    }
+
+    setTimeout(() => {
+      key_config.forEach((key) => {
+        console.log(element.key);
+        console.log(interval);
+        if (element.key.toLocaleLowerCase() === key.key) {
+          document.getElementById(key.id).click();
+          // const audio = new Audio(key.sound);
+          // audio.play();
+        }
+      });
+    }, index * interval);
+
+    //clearInterval(test);
+  });
+};
 
 //---------------------Keybindings-------------------------//
 // Sound key configurations
@@ -129,7 +151,6 @@ updateTargets();
 //---------------------Record Array-------------------------//
 let record_arr = [];
 
-
 //---------------------------Create HTML Markup---------------------------------//
 /* 
     <div id="boom" class="card control">
@@ -143,7 +164,6 @@ const parent = document.getElementById("controls");
 
 //key_config.map() //same as "forEach" but will return a new array
 key_config.forEach((k) => {
-
   // Creating the following HTML markup
   // <div id="boom" class="card control"></div>
   const control_div = document.createElement("div");
@@ -210,27 +230,6 @@ key_config.forEach((k) => {
   });
   //console.log(k);
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // document.addEventListener("keydown", (e) => {
 //   if (e.key === "a") {
